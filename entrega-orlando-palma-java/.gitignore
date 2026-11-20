@@ -1,0 +1,10 @@
+target/
+__pycache__/
+*.log
+# Los logs de JMeter de cada corrida oficial SI se versionan: son pequenos y son
+# la prueba de con que parametros (users, duration, rampup, port) se ejecuto
+# cada nivel.
+!evidencias/raw/*_jmeter.log
+# Los JTL de las sondas de la busqueda de estres no se versionan: son ~190 MB.
+# Su resumen completo esta en evidencias/busqueda_estres/busqueda_estres.csv
+evidencias/busqueda_estres/raw/

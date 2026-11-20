@@ -1,0 +1,15 @@
+users,duration_s,samples,avg_ms,p90_ms,p95_ms,throughput,error_pct,errors_5xx,errors_socket,errors_other,top_error
+500,30,117865,106,212,267,3910.45,0.0,0,0,0,
+1500,30,96563,391,472,614,3018.82,1.75,0,1689,0,Non HTTP response code: org.apache.http.conn.HttpHostConnectException: Non HTTP response message: Connect to localhost:5002 [localhost/127.0.0.1; localhost/0:0:0:0:0:0:0:1] failed: Connection refused
+3000,30,111976,503,481,1921,3414.11,4.4,0,4927,0,Non HTTP response code: org.apache.http.conn.HttpHostConnectException: Non HTTP response message: Connect to localhost:5002 [localhost/127.0.0.1; localhost/0:0:0:0:0:0:0:1] failed: Connection refused
+700,30,121850,144,257,307,4036.37,0.0,0,0,0,
+900,30,110173,206,337,399,3634.03,0.0,0,0,0,
+1100,30,110338,252,374,446,3595.95,0.02,0,24,0,Non HTTP response code: java.net.SocketException: Non HTTP response message: Connection reset
+1300,30,113114,289,373,442,3544.78,0.69,0,784,0,Non HTTP response code: org.apache.http.conn.HttpHostConnectException: Non HTTP response message: Connect to localhost:5002 [localhost/127.0.0.1; localhost/0:0:0:0:0:0:0:1] failed: Connection refused
+920,30,101307,229,379,465,3328.74,0.0,0,0,0,
+960,30,125296,194,314,360,4133.27,0.0,0,0,0,
+1000,30,113991,221,354,408,3756.62,0.02,0,21,0,Non HTTP response code: java.net.SocketException: Non HTTP response message: Connection reset
+1040,30,118615,219,343,402,3853.14,0.02,0,21,0,Non HTTP response code: java.net.SocketException: Non HTTP response message: Connection reset
+1080,30,113863,241,370,435,3676.32,0.02,0,23,0,Non HTTP response code: java.net.SocketException: Non HTTP response message: Connection reset
+1100,30,112627,247,361,420,3653.87,0.02,0,23,0,Non HTTP response code: java.net.SocketException: Non HTTP response message: Connection reset
+1120,30,92937,305,434,527,2909.01,0.2,0,183,0,Non HTTP response code: java.net.SocketTimeoutException: Non HTTP response message: Read timed out

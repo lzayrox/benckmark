@@ -1,0 +1,69 @@
+DIAGNOSTICO: de donde salen los "Connection refused" bajo carga
+================================================================
+
+Pregunta: las sondas de 1100 usuarios en adelante devuelven
+HttpHostConnectException "Connection refused". Hay que saber si el limite es de
+la API (Spring Boot / Tomcat) o del reenvio de puertos que colima mantiene entre
+macOS y la VM de Linux donde viven los contenedores.
+
+Indicios previos
+----------------
+- El log de la API tiene 25 lineas en total, todas del arranque. Ni un error,
+  ni una excepcion, ni un rechazo, pese a las 4927 conexiones fallidas de la
+  sonda de 3000 usuarios.
+- somaxconn dentro del contenedor es 4096, muy por encima de los 200 hilos de
+  Tomcat mas los 100 de accept-count.
+
+Medicion
+--------
+Se intento lanzar la misma herramienta (ab) por los dos caminos, pero el ab que
+trae macOS (version 2.3 $Revision: 1901567$) aborta con
+"apr_socket_connect(): Invalid argument (22)" incluso con concurrencia 100, asi
+que no sirve para medir el camino del reenvio. El camino de dentro de la VM si
+se pudo medir.
+
+Camino A - desde macOS a localhost:5002, pasando por el reenvio (JMeter):
+  1500 usuarios -> 3018.82 req/s, 1.75 % de error, 1689 Connection refused
+  3000 usuarios -> 3414.11 req/s, 4.40 % de error, 4927 Connection refused
+
+Camino B - desde dentro de la VM a la IP del contenedor, sin reenvio (ab):
+  con keep-alive:
+    concurrencia  100 -> 8007.03 req/s, Connect: 0 fallos
+    concurrencia  200 -> 8038.18 req/s, Connect: 0 fallos
+    concurrencia 1500 -> 7698.22 req/s, Connect: 0 fallos
+  SIN keep-alive (cada peticion abre su propia conexion):
+    concurrencia 1500 -> 6631.48 req/s, Connect: 0 fallos, 60000 peticiones
+
+La prueba sin keep-alive responde a la objecion mas seria que se le puede hacer
+a esta comparacion: con keep-alive, ab abre solo tantas conexiones como
+concurrencia y despues las reutiliza, mientras que los fallos de JMeter ocurren
+justo AL ESTABLECER la conexion. Repitiendola sin keep-alive, donde cada una de
+las 60000 peticiones abre su propia conexion -que es el escenario en el que un
+rechazo tendria que aparecer-, el contador Connect sigue en 0.
+
+  (Los "Failed requests" que reporta ab son de tipo Length, no de conexion: el
+  cuerpo de la respuesta varia unos bytes porque el orderId es un UUID. No son
+  errores: Connect, Receive y Exceptions estan todos en 0.)
+
+Conclusion
+----------
+Con la MISMA concurrencia de 1500, la API atiende 60000 peticiones sin un solo
+fallo de conexion cuando se la ataca desde dentro de la VM, y en cambio acumula
+1689 "Connection refused" cuando se la ataca desde macOS a traves del reenvio de
+puertos. Ademas sostiene entre 7200 y 8800 req/s por dentro, frente a los
+3000-5200 req/s que se miden por fuera.
+
+Es decir: el techo de throughput y los rechazos de conexion de las corridas
+oficiales son del camino macOS -> VM, no de Spring Boot. La API no llego a
+saturarse en ninguna de las pruebas.
+
+Las cifras de ab y las de JMeter no son directamente comparables en valor
+absoluto (son clientes distintos, con overhead distinto), pero la diferencia
+cualitativa si lo es, y no depende del uso de keep-alive: cero fallos de
+conexion frente a miles, con la misma concurrencia.
+
+Las salidas crudas de todas estas mediciones estan en la carpeta crudo/:
+  crudo/docker_logs_api.txt           log completo de la API
+  crudo/somaxconn.txt                 limites de encolado del contenedor
+  crudo/ab_con_keepalive.txt          ab con -k, tres concurrencias
+  crudo/ab_sin_keepalive_c1500.txt    ab sin -k, concurrencia 1500

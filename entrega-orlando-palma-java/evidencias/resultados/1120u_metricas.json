@@ -1,0 +1,1 @@
+{"samples": 184477, "avg": 337, "p90": 473, "p95": 563, "throughput": 2956.36, "error_pct": 0.19, "errors_5xx": 0, "errors_socket": 354, "errors_other": 0, "top_error": "Non HTTP response code: org.apache.http.conn.HttpHostConnectException: Non HTTP response message: Connect to localhost:5002 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused"}

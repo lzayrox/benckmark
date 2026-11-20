@@ -1,0 +1,49 @@
+ANALISIS DE LOS ERRORES DE LA CORRIDA OFICIAL DE ESTRES (1120 usuarios)
+=======================================================================
+
+Muestras totales : 184477
+Exitosas (201)   : 184123
+Fallidas         :    354   (0.19 %)
+Errores 5xx      :      0
+
+Desglose de las 354 fallidas, por mensaje:
+
+   182  Connection refused     la conexion no llega a establecerse, la peticion
+                               nunca alcanza la API
+   108  Read timed out         la API si recibio la peticion; el cliente se
+                               cansa de esperar a los 10 s
+    61  Connection reset       ambiguo: puede cortarse antes o despues de que
+                               la API procese
+     3  Broken pipe            ambiguo, por el mismo motivo
+
+Contraste con la base de datos
+------------------------------
+Filas en orders tras la corrida : 184228
+Peticiones exitosas segun JMeter: 184123
+
+Hay 105 filas MAS que peticiones exitosas. No es un error de cuentas: son
+peticiones que la API recibio, proceso y guardo, pero cuya respuesta el cliente
+dio por perdida (los "Read timed out" y parte de los "Connection reset").
+
+Lo importante es la direccion de la diferencia: la base de datos tiene mas
+pedidos que los que JMeter conto como exitosos, nunca menos. Es decir, no se
+perdio ni un solo pedido de los que llegaron a la API. Lo que hay son
+respuestas tardias, no escrituras perdidas, y la transaccion hizo su trabajo:
+cero 5xx y cero pedidos a medias (order_items siempre es exactamente el doble
+de orders, porque el cuerpo de JMeter manda 2 items por pedido).
+
+Filas en order_items: 368456 = 184228 x 2
+
+Integridad de la transaccion
+----------------------------
+Consulta: pedidos cuyo numero de items es distinto de 2
+
+  SELECT count(*) FROM (SELECT order_id, count(*) AS n
+                        FROM order_items GROUP BY order_id) t
+  WHERE t.n <> 2;
+
+  Resultado: 0
+
+Ninguno de los 184228 pedidos quedo a medias. O se guardo la fila de orders con
+sus dos items, o no se guardo nada. La transaccion @Transactional cumplio su
+funcion incluso en el nivel de estres.

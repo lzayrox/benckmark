@@ -1,0 +1,17 @@
+> POST http://localhost:5002/api/orders
+> Body: {"customerId":"C123","items":[{"productId":"P1","quantity":2,"price":10.5},{"productId":"P2","quantity":1,"price":5.0}]}
+< HTTP 201
+< {"orderId":"ORD-f9009646-579e-4e88-a279-023bb59da41d","customerId":"C123","totalAmount":26.00,"itemsCount":3,"processedAt":"2026-11-20T19:57:14.074532Z"}
+
+> SELECT * FROM orders; SELECT * FROM order_items;
+ id |                 order_id                 | customer_id | total_amount | items_count |         created_at         
+----+------------------------------------------+-------------+--------------+-------------+----------------------------
+  1 | ORD-f9009646-579e-4e88-a279-023bb59da41d | C123        |        26.00 |           3 | 2026-11-20 19:57:14.074532
+(1 row)
+
+ id |                 order_id                 | product_id | quantity | price 
+----+------------------------------------------+------------+----------+-------
+  1 | ORD-f9009646-579e-4e88-a279-023bb59da41d | P1         |        2 | 10.50
+  2 | ORD-f9009646-579e-4e88-a279-023bb59da41d | P2         |        1 |  5.00
+(2 rows)
+

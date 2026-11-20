@@ -1,0 +1,8 @@
+### Limites de encolado de conexiones dentro del contenedor de la API
+### comando: docker exec java-api-orders cat /proc/sys/net/core/somaxconn
+
+somaxconn: 4096
+
+### Configuracion de Tomcat declarada en application.properties:
+server.tomcat.threads.max=200
+server.tomcat.accept-count=100

@@ -1,0 +1,31 @@
+### Log completo de la API tras todas las pruebas
+### comando: docker logs java-api-orders
+
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.0)
+
+2026-11-20T19:55:18.315Z  INFO 1 --- [           main] com.benchmark.orders.OrdersApplication   : Starting OrdersApplication v1.0.0 using Java 21.0.13 with PID 1 (/app/app.jar started by root in /app)
+2026-11-20T19:55:18.317Z  INFO 1 --- [           main] com.benchmark.orders.OrdersApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T19:55:18.954Z  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 5002 (http)
+2026-11-20T19:55:18.963Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-20T19:55:18.963Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2026-11-20T19:55:18.978Z  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-11-20T19:55:18.979Z  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 626 ms
+2026-11-20T19:55:19.255Z  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 5002 (http) with context path '/'
+2026-11-20T19:55:19.266Z  INFO 1 --- [           main] com.benchmark.orders.OrdersApplication   : Started OrdersApplication in 1.181 seconds (process running for 1.53)
+2026-11-20T19:57:04.927Z  INFO 1 --- [nio-5002-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-20T19:57:04.928Z  INFO 1 --- [nio-5002-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-20T19:57:04.931Z  INFO 1 --- [nio-5002-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-11-20T19:57:05.032Z  INFO 1 --- [nio-5002-exec-1] com.zaxxer.hikari.HikariDataSource       : orders-pool - Starting...
+2026-11-20T19:57:05.164Z  INFO 1 --- [nio-5002-exec-1] com.zaxxer.hikari.pool.HikariPool        : orders-pool - Added connection org.postgresql.jdbc.PgConnection@4f5e8433
+2026-11-20T19:57:05.165Z  INFO 1 --- [nio-5002-exec-1] com.zaxxer.hikari.HikariDataSource       : orders-pool - Start completed.
+
+### numero de lineas:
+      25

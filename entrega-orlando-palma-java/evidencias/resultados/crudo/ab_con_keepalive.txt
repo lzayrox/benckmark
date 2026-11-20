@@ -1,0 +1,29 @@
+### ab CON keep-alive (-k), dentro de la VM, varias concurrencias
+
+--- concurrencia 100 ---
+comando: ab -n 20000 -c 100 -k -p /tmp/abbody.json -T application/json http://172.18.0.3:5002/api/orders
+Complete requests:      20000
+Failed requests:        23
+   (Connect: 0, Receive: 0, Length: 23, Exceptions: 0)
+Requests per second:    8007.03 [#/sec] (mean)
+Time per request:       12.489 [ms] (mean)
+Time per request:       0.125 [ms] (mean, across all concurrent requests)
+
+--- concurrencia 200 ---
+comando: ab -n 20000 -c 200 -k -p /tmp/abbody.json -T application/json http://172.18.0.3:5002/api/orders
+Complete requests:      20000
+Failed requests:        17
+   (Connect: 0, Receive: 0, Length: 17, Exceptions: 0)
+Requests per second:    8038.18 [#/sec] (mean)
+Time per request:       24.881 [ms] (mean)
+Time per request:       0.124 [ms] (mean, across all concurrent requests)
+
+--- concurrencia 1500 ---
+comando: ab -n 20000 -c 1500 -k -p /tmp/abbody.json -T application/json http://172.18.0.3:5002/api/orders
+Complete requests:      20000
+Failed requests:        24
+   (Connect: 0, Receive: 0, Length: 24, Exceptions: 0)
+Requests per second:    7698.22 [#/sec] (mean)
+Time per request:       194.850 [ms] (mean)
+Time per request:       0.130 [ms] (mean, across all concurrent requests)
+
